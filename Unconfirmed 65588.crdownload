@@ -1,0 +1,100 @@
+var PLAY = 1;
+var END = 0
+var gameState= PLAY;
+
+
+
+var knight,enemy,princess,obstacle1,obstacle2,obstacle1Image,obstacle1Image;
+var knightImage,enemyImage,princessImage,backgroundImage;
+
+
+function preload() {
+knightImage=loadImage("knight.png")
+backgroundImage=loadImage("background.jpg")
+enemyImage=loadImage("enemy.png")
+princessImage=loadImage("princess.png")
+obstacle1Image=loadImage("spike.png")
+obstacle2Image=loadImage("spike2.png")
+}
+
+function setup() {
+  createCanvas(800,400);
+  knight=createSprite(50, 300, 100, 100);
+  knight.addImage(knightImage)
+  knight.scale=0.3
+  
+  invisibleGround = createSprite(400,420,800,100)
+  invisibleGround.visible = false;
+
+
+
+  princess=createSprite(750, 300, 10, 10);
+  princess.addImage(princessImage)
+  princess.scale=0.3
+
+  enemy=createSprite(500, 325, 50, 50);
+  enemy.addImage(enemyImage)
+  enemy.scale=0.5
+  enemy.velocityX=-2
+  obstacle1=createSprite(610,325,50,50)
+  obstacle1.addImage(obstacle1Image)
+  obstacle1.scale=0.3
+  
+  obstacle2=createSprite(600,40,50,50)
+  obstacle2.addImage(obstacle2Image)
+  obstacle2.scale=0.3
+}
+function draw() {
+  background(backgroundImage);  
+  
+ if(gameState === PLAY){
+ knight.collide(invisibleGround)
+ knight.velocityY = knight.velocityY+4
+ 
+ if(keyDown("RIGHT_ARROW")){
+  knight.x=knight.x+5 
+}
+ if(keyDown("LEFT_ARROW")){
+  knight.x=knight.x-5
+}
+
+if(keyDown("space")&& knight.y >= 160) {
+ knight.velocityY = -12;
+
+}
+ if(enemy.isTouching(knight)){
+  gameState = END
+ }
+ if(obstacle1.isTouching(knight)){
+  gameState = END
+
+}
+
+
+}
+if(obstacle2.isTouching(knight)){
+ gameState = END
+}
+
+ 
+ 
+if(gameState === END){
+  stroke("black")
+  strokeWeight(5)
+  textSize(50)
+  text("GAME OVER",200,200) 
+ knight.velocityY=0
+ enemy.velocityX=0
+ }
+
+
+
+
+
+//depth
+knight.depth=enemy.depth
+knight.depth=knight.depth+2
+  
+drawSprites();
+
+ }
